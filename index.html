@@ -3,78 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test de Fugas WebView</title>
+    <title>Doble Fuga WebView</title>
+    <script>
+        function probarIntent() {
+            try {
+                window.location.replace("intent://com.android.chrome/#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;end");
+            } catch(e) {
+                console.log(e);
+            }
+        }
+
+        function probarWindowOpen() {
+            try {
+                window.open("https://www.google.com", "_system");
+            } catch(e) {
+                console.log(e);
+            }
+        }
+    </script>
     <style>
         body {
             font-family: sans-serif;
-            background-color: #f0f0f0;
+            background-color: #111;
+            color: #fff;
             padding: 20px;
-            margin: 0;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-        }
-        h3 {
-            margin: 10px 0 0 0;
-            color: #333;
-            font-size: 16px;
+            gap: 20px;
+            height: 100vh;
+            margin: 0;
+            box-sizing: border-box;
+            justify-content: center;
+            align-items: center;
         }
         .btn {
             display: block;
-            padding: 15px;
-            color: white;
+            width: 100%;
+            max-width: 300px;
+            padding: 16px;
             text-align: center;
-            text-decoration: none;
             font-weight: bold;
             border-radius: 8px;
             border: none;
             font-size: 16px;
-            width: 100%;
-            box-sizing: border-box;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            text-decoration: none;
         }
-        .btn:active { opacity: 0.8; }
-        .btn-insta { background: #E1306C; }
-        .btn-chrome { background: #FABB05; color: black; }
-        .btn-market { background: #4285F4; }
-        .btn-yt { background: #FF0000; }
-        .btn-diag { background: #555555; }
+        .btn-intent { background-color: #FABB05; color: black; }
+        .btn-system { background-color: #4285F4; color: white; }
+        p { text-align: center; color: #aaa; font-size: 14px; margin: 0; max-width: 300px; }
     </style>
 </head>
 <body>
 
-    <!-- 4. Fuga por iframe invisible (se ejecuta automáticamente al cargar la página) -->
-    <iframe src="intent://#Intent;package=com.android.chrome;end" style="display:none;"></iframe>
+    <h2>Prueba de Fuga</h2>
+    <p>Toca los botones inmediatamente al abrir la página para explotar la ventana de ejecución de JavaScript.</p>
 
-    <h3>1. Fugas por Atributo Target</h3>
-    <a href="intent://#Intent;package=com.instagram.android;end" target="_top" class="btn btn-insta">
-        Fuga _top: Instagram
-    </a>
-    
-    <a href="intent://com.android.chrome/#Intent;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;end" target="_parent" class="btn btn-chrome">
-        Fuga _parent: Chrome
-    </a>
+    <button onclick="probarIntent()" class="btn btn-intent">
+        Opción 1: Intent a Chrome
+    </button>
 
-    <h3>2. Fuga por Protocolo Market</h3>
-    <a href="market://details?id=com.android.chrome" class="btn btn-market">
-        Fuga Market: Chrome
-    </a>
-
-    <h3>3. Fuga por Formulario POST</h3>
-    <form action="intent://#Intent;package=com.google.android.youtube;end" method="POST" target="_blank" style="margin:0;">
-        <button type="submit" class="btn btn-yt">
-            Fuga POST: YouTube
-        </button>
-    </form>
-
-    <h3>Diagnóstico (Test del Candado)</h3>
-    <a href="mailto:test@test.com" class="btn btn-diag">
-        Prueba: Correo (mailto)
-    </a>
-    
-    <a href="tel:123456789" class="btn btn-diag">
-        Prueba: Teléfono (tel)
-    </a>
+    <button onclick="probarWindowOpen()" class="btn btn-system">
+        Opción 2: window.open (_system)
+    </button>
 
 </body>
 </html>
